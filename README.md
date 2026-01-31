@@ -1,1 +1,1 @@
-# mistxi_launcher
+# Home of the MistXI launcher application
