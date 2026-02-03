@@ -35,7 +35,7 @@ A modern, all-in-one launcher for the MistXI FFXI private server. Automates inst
 
 - **OS:** Windows 10 or 11 (64-bit)
 - **Framework:** .NET 8.0 Runtime (included in release)
-- **Disk Space:** ~10 GB (8 GB for FFXI, rest for launcher/Ashita)
+- **Disk Space:** ~15 GB 
 - **Internet:** Required for downloads and gameplay
 
 ## 🎯 Quick Start
@@ -65,7 +65,7 @@ A modern, all-in-one launcher for the MistXI FFXI private server. Automates inst
 
 **Total Time:** ~1 hour (mostly waiting for PlayOnline updates)
 
-### For Developers
+### For Developers/Contributors
 
 #### Prerequisites
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
@@ -138,11 +138,11 @@ Profiles saved in: `%LocalAppData%\MistXILauncher\launcher-state.json`
 
 ### Addon Manager
 
-**Approved Addons:**
+**Pre-compiled with popular Addons:**
 - config, distance, drawdistance, enternity, fps, hideconsole
 - mapdot, minimapmon, timestamp, tparty, nomount
 
-**Approved Plugins:**
+**Pre-compiled with popular Plugins:**
 - minimap, screenshot, deeps
 
 **Features:**
@@ -202,7 +202,7 @@ On every launch, the launcher:
 2. Navigate to your FFXI folder
 3. Common locations:
    - `C:\Program Files (x86)\PlayOnline\SquareEnix\FINAL FANTASY XI`
-   - `D:\Games\SteamLibrary\steamapps\common\FFXINA\SquareEnix\FINAL FANTASY XI`
+   - `C:\Program Files (x86)\Steam\steamapps\common\FFXINA\SquareEnix\FINAL FANTASY XI`
 
 ### Addons Don't Load
 - Ensure "addons" plugin is enabled (launcher does this automatically)
@@ -218,13 +218,6 @@ On every launch, the launcher:
 1. Check logs: `%LocalAppData%\MistXILauncher\logs\launcher.log`
 2. Verify FFXI path is correct
 3. Ensure Ashita downloaded: Check for `runtime/ashita/Ashita-cli.exe`
-
-### Icon Cache Issues
-If the launcher icon looks wrong:
-```cmd
-ie4uinit.exe -show
-```
-Or restart your computer.
 
 ### Version Mismatch Error
 - Delete `\ROM\0\0.dat` from FFXI folder
@@ -268,6 +261,10 @@ Or restart your computer.
 
 ## 📝 Changelog
 
+### v1.1.1 (February 2026)
+- ✨ Fullscreen mode support
+- 🐛 Fixed profile dropdown switching
+
 ### v1.1.0 (February 2026)
 - ✨ FFXI installer automation
 - ✨ Smart privilege elevation (embedded helper)
@@ -275,9 +272,6 @@ Or restart your computer.
 - ✨ Unified script generation
 - ✨ Auto-cleanup installer files
 - ✨ Enhanced POL auto-detection
-- ✨ Fullscreen mode support
-- 🐛 Fixed addon/plugin persistence
-- 🐛 Fixed profile dropdown switching
 - 🐛 Fixed path escaping in helper
 - 🎨 Approved addon/plugin filtering
 
@@ -296,7 +290,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - **Ashita v4** - https://github.com/AshitaXI/Ashita-v4beta
 - **XiLoader** - https://github.com/LandSandBoat/xiloader
-- **MistXI Team** - For the amazing 75-era FFXI private server
 
 ## 💬 Support
 
