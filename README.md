@@ -297,6 +297,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Website:** https://mistxi.com
 - **Issues:** https://github.com/mistxi/mistxi_launcher/issues
 
+## Disclaimer
+Final Fantasy XI and PlayOnline are registered trademarks of Square Enix Holdings Co., Ltd.
+This launcher is an independent tool for connecting to the MistXI private server and does not contain
+any Square Enix intellectual property. All game files, and credited third-party tools are downloaded 
+from official sources during runtime and are not pre-packaged or re-distributed.
+
 ---
 
 **Built with ❤️ for the FFXI private server community**
