@@ -2,7 +2,7 @@
 
 A modern, all-in-one launcher for the MistXI FFXI private server. Automates installation, patching, and configuration to get you playing in minutes instead of hours.
 
-![MistXI Launcher](https://img.shields.io/badge/version-1.1.0-blue)
+![MistXI Launcher](https://img.shields.io/badge/version-1.1.1-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey)
 
