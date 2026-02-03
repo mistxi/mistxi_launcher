@@ -1,0 +1,2 @@
+C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\publish\MistXI.PatchHelper.pdb
+C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\publish\MistXI.PatchHelper.exe

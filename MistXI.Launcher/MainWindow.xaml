@@ -1,0 +1,56 @@
+<Window x:Class="MistXI.Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:MistXI.Launcher.Views"
+        Title="MistXI Launcher" Height="950" Width="1400"
+        MinHeight="900" MinWidth="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Mist.Background}">
+  <Grid Margin="16">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Border Grid.Row="0" Background="{StaticResource Mist.TopBar}" CornerRadius="22" Padding="12">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Image Grid.Column="0" 
+               Source="pack://application:,,,/Assets/Horizontal_Logo_Fixed.png" 
+               Height="32" 
+               Stretch="Uniform"
+               Cursor="Hand"
+               Margin="6,0,14,0"
+               ToolTip="Visit mistxi.com"
+               MouseDown="Logo_MouseDown"/>
+
+        <ToggleButton x:Name="NavHome" Grid.Column="1" Style="{StaticResource Mist.NavPill}" IsChecked="True" Click="NavHome_Click" Width="120">HOME</ToggleButton>
+        <ToggleButton x:Name="NavProfiles" Grid.Column="2" Style="{StaticResource Mist.NavPill}" Margin="8,0,0,0" Click="NavProfiles_Click" Width="120">PROFILES</ToggleButton>
+        <ToggleButton x:Name="NavAddons" Grid.Column="3" Style="{StaticResource Mist.NavPill}" Margin="8,0,0,0" Click="NavAddons_Click" Width="120">ADDONS</ToggleButton>
+        <ToggleButton x:Name="NavSettings" Grid.Column="4" Style="{StaticResource Mist.NavPill}" Margin="8,0,0,0" Click="NavSettings_Click" Width="120">SETTINGS</ToggleButton>
+
+        <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Center">
+          <TextBlock Foreground="{StaticResource Mist.TextDim}" Text="Players Online" Margin="0,0,10,0"/>
+          <TextBlock x:Name="PlayersOnlineText" Foreground="{StaticResource Mist.Accent}" Text="—" Margin="0,0,18,0"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <ContentControl Grid.Row="1" x:Name="MainContent" Margin="0,16,0,16"/>
+
+    <DockPanel Grid.Row="2">
+      <TextBlock x:Name="StatusText" Foreground="{StaticResource Mist.TextDim}" />
+      <TextBlock Text="v1.1.1" Foreground="{StaticResource Mist.TextDim}" DockPanel.Dock="Right"/>
+    </DockPanel>
+  </Grid>
+</Window>

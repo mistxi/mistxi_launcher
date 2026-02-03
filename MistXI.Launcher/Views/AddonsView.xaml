@@ -1,0 +1,97 @@
+<UserControl x:Class="MistXI.Launcher.Views.AddonsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent">
+  
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header -->
+    <Border Grid.Row="0" Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+      <StackPanel>
+        <TextBlock Style="{StaticResource Mist.H2}" Text="Addon Manager" Foreground="{StaticResource Mist.Accent}"/>
+        <TextBlock Style="{StaticResource Mist.Caption}" 
+                   Margin="0,8,0,12" 
+                   TextWrapping="Wrap"
+                   Text="Enable or disable Ashita addons and plugins for the active profile. Changes are applied when you launch the game."/>
+        
+        <DockPanel>
+          <TextBlock Text="Active Profile:" 
+                     FontWeight="SemiBold"
+                     VerticalAlignment="Center"
+                     Margin="0,0,8,0"/>
+          <TextBlock x:Name="ActiveProfileText" 
+                     Foreground="{StaticResource Mist.Accent}"
+                     VerticalAlignment="Center"
+                     FontWeight="SemiBold"/>
+          <Button x:Name="RefreshButton"
+                  Style="{StaticResource Mist.SecondaryButton}"
+                  Click="Refresh_Click"
+                  Padding="12,8"
+                  DockPanel.Dock="Right">🔄 Refresh</Button>
+        </DockPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Addons and Plugins -->
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- Addons -->
+      <Border Grid.Column="0" Style="{StaticResource Mist.Card}" Margin="0,0,8,0">
+        <StackPanel>
+          <DockPanel Margin="0,0,0,12">
+            <TextBlock Style="{StaticResource Mist.H2}" 
+                       Text="Addons"
+                       Foreground="{StaticResource Mist.Accent}"
+                       DockPanel.Dock="Left"/>
+            <TextBlock x:Name="AddonCountText"
+                       Style="{StaticResource Mist.Caption}"
+                       VerticalAlignment="Center"
+                       Margin="12,0,0,0"/>
+          </DockPanel>
+
+          <TextBlock Style="{StaticResource Mist.Caption}"
+                     Margin="0,0,0,12"
+                     TextWrapping="Wrap"
+                     Text="Lua-based addons that add functionality to the game. Found in runtime/ashita/addons/"/>
+
+          <ScrollViewer Height="500" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="AddonsPanel"/>
+          </ScrollViewer>
+        </StackPanel>
+      </Border>
+
+      <!-- Plugins -->
+      <Border Grid.Column="1" Style="{StaticResource Mist.Card}" Margin="8,0,0,0">
+        <StackPanel>
+          <DockPanel Margin="0,0,0,12">
+            <TextBlock Style="{StaticResource Mist.H2}" 
+                       Text="Plugins"
+                       Foreground="{StaticResource Mist.Accent}"
+                       DockPanel.Dock="Left"/>
+            <TextBlock x:Name="PluginCountText"
+                       Style="{StaticResource Mist.Caption}"
+                       VerticalAlignment="Center"
+                       Margin="12,0,0,0"/>
+          </DockPanel>
+
+          <TextBlock Style="{StaticResource Mist.Caption}"
+                     Margin="0,0,0,12"
+                     TextWrapping="Wrap"
+                     Text="Native DLL plugins for advanced functionality. Found in runtime/ashita/plugins/"/>
+
+          <ScrollViewer Height="500" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="PluginsPanel"/>
+          </ScrollViewer>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

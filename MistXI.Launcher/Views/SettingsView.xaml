@@ -1,0 +1,165 @@
+<UserControl x:Class="MistXI.Launcher.Views.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel>
+      <TextBlock Style="{StaticResource Mist.H1}" Text="Settings" Foreground="{StaticResource Mist.Accent}"/>
+
+      <!-- Install FFXI -->
+      <Border Style="{StaticResource Mist.Card}" Margin="0,16,0,0">
+        <StackPanel>
+          <TextBlock Style="{StaticResource Mist.H2}" Foreground="{StaticResource Mist.Accent}" Text="Install FINAL FANTASY XI"/>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,8,0,8" TextWrapping="Wrap"
+                     Text="Don't have FFXI installed? Download the official installer from Square Enix."/>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,0,0,12" TextWrapping="Wrap" Foreground="{StaticResource Mist.Gold}"
+                     Text="⚠️ This will download ~3.5 GB of files to your system."/>
+          
+          <DockPanel Margin="0,0,0,12">
+            <Button x:Name="CleanupInstallerBtn" 
+                    Style="{StaticResource Mist.SecondaryButton}" 
+                    DockPanel.Dock="Right"
+                    Margin="8,0,0,0"
+                    Click="CleanupInstaller_Click"
+                    Padding="16,10">Clean Up Files</Button>
+            <Button x:Name="LaunchSetupBtn" 
+                    Style="{StaticResource Mist.SecondaryButton}" 
+                    DockPanel.Dock="Right"
+                    Margin="8,0,0,0"
+                    Click="LaunchSetup_Click"
+                    IsEnabled="False"
+                    Padding="16,10">Launch Setup</Button>
+            <Button x:Name="DownloadInstallerBtn" 
+                    Style="{StaticResource Mist.PrimaryButton}" 
+                    DockPanel.Dock="Left"
+                    Click="DownloadInstaller_Click"
+                    Padding="20,10">Download Installer (3.5 GB)</Button>
+          </DockPanel>
+          
+          <ProgressBar x:Name="InstallerProgressBar"
+                       Height="24"
+                       Minimum="0"
+                       Maximum="100"
+                       Value="0"
+                       Visibility="Collapsed"/>
+          
+          <TextBlock x:Name="InstallerStatusText"
+                     Style="{StaticResource Mist.Caption}"
+                     Margin="0,8,0,0"
+                     TextWrapping="Wrap"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Mist.Card}" Margin="0,16,0,0">
+        <StackPanel>
+          <TextBlock Style="{StaticResource Mist.H2}" Foreground="{StaticResource Mist.Accent}" Text="Paths"/>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,8,0,16"
+                     Text="Point the launcher at your FFXI folder and PlayOnlineViewer for automated patching."/>
+          
+          <!-- FFXI Folder -->
+          <TextBlock Margin="0,0,0,6" Text="FINAL FANTASY XI folder" FontWeight="SemiBold"/>
+          <DockPanel Margin="0,0,0,6">
+            <Button Style="{StaticResource Mist.SecondaryButton}" 
+                    Margin="8,0,0,0" 
+                    Click="BrowseFfxi_Click" 
+                    DockPanel.Dock="Right"
+                    Padding="20,10">Browse</Button>
+            <Button x:Name="AutoDetectBtn" 
+                    Style="{StaticResource Mist.SecondaryButton}" 
+                    Margin="8,0,0,0" 
+                    Click="AutoDetect_Click" 
+                    DockPanel.Dock="Right"
+                    Padding="20,10">Auto-Detect</Button>
+            <TextBox x:Name="FfxiPathBox" 
+                     Style="{StaticResource Mist.TextBox}"
+                     VerticalContentAlignment="Center"/>
+          </DockPanel>
+          <TextBlock x:Name="FfxiValidation" 
+                     Style="{StaticResource Mist.Caption}" 
+                     Margin="0,0,0,16"/>
+
+          <!-- PlayOnline Viewer Folder -->
+          <TextBlock Margin="0,0,0,6" Text="PlayOnlineViewer folder" FontWeight="SemiBold"/>
+          <DockPanel Margin="0,0,0,6">
+            <Button Style="{StaticResource Mist.SecondaryButton}" 
+                    Margin="8,0,0,0" 
+                    Click="BrowsePol_Click" 
+                    DockPanel.Dock="Right"
+                    Padding="20,10">Browse</Button>
+            <Button Style="{StaticResource Mist.SecondaryButton}" 
+                    Margin="8,0,0,0" 
+                    Click="AutoDetectPol_Click" 
+                    DockPanel.Dock="Right"
+                    Padding="20,10">Auto-Detect</Button>
+            <TextBox x:Name="PolPathBox" 
+                     Style="{StaticResource Mist.TextBox}"
+                     VerticalContentAlignment="Center"/>
+          </DockPanel>
+          <TextBlock x:Name="PolValidation" 
+                     Style="{StaticResource Mist.Caption}" 
+                     Margin="0,0,0,0"/>
+
+          <Button Style="{StaticResource Mist.PrimaryButton}" 
+                  Margin="0,16,0,0" 
+                  Click="SavePaths_Click"
+                  HorizontalAlignment="Left">Save Paths</Button>
+          <TextBlock x:Name="PathStatus" Style="{StaticResource Mist.Caption}" Margin="0,8,0,0"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Mist.Card}" Margin="0,16,0,0">
+        <StackPanel>
+          <TextBlock Style="{StaticResource Mist.H2}" Foreground="{StaticResource Mist.Accent}" Text="FFXI Patching"/>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,8,0,12"
+                     TextWrapping="Wrap"
+                     Text="If you have an existing FFXI installation that needs to be patched for MistXI, use this automated tool. It will install the DSP patch, guide you through PlayOnline file check, copy data files, and prepare for reboot."/>
+          
+          <Button x:Name="PatchFfxiButton"
+                  Style="{StaticResource Mist.PrimaryButton}" 
+                  Click="PatchFfxi_Click"
+                  Padding="16,12">
+            🔧 Patch FFXI for MistXI
+          </Button>
+          
+          <TextBlock x:Name="PatchStatusText" 
+                     Style="{StaticResource Mist.Caption}" 
+                     Margin="0,12,0,0"
+                     TextWrapping="Wrap"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Mist.Card}" Margin="0,16,0,0">
+        <StackPanel>
+          <TextBlock Style="{StaticResource Mist.H2}" Foreground="{StaticResource Mist.Accent}" Text="First-time Setup Helpers"/>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,8,0,0"
+                     Text="Run PlayOnline once to 'Check Files' + 'Fix errors'. After that, MistXI launches without POL via XiLoader."/>
+          <Button Style="{StaticResource Mist.SecondaryButton}" Margin="0,12,0,0" Click="OpenPol_Click">Open PlayOnline (manual file-check)</Button>
+          <Button Style="{StaticResource Mist.SecondaryButton}" Margin="0,8,0,0" Click="CopyData_Click">Copy PlayOnlineViewer\data into FFXI\data</Button>
+
+          <Separator Margin="0,14,0,14"/>
+
+          <TextBlock Text="System Reboot" FontWeight="SemiBold"/>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,6,0,0" TextWrapping="Wrap"
+                     Text="After updating FFXI or changing game settings, Windows may need to register new components. A reboot ensures everything works correctly."/>
+          <DockPanel Margin="0,10,0,0">
+            <Button Style="{StaticResource Mist.SecondaryButton}" Click="MarkReboot_Click">Mark Reboot Needed</Button>
+            <Button Style="{StaticResource Mist.SecondaryButton}" Margin="10,0,0,0" Click="RebootNow_Click">Reboot Now</Button>
+          </DockPanel>
+          <TextBlock x:Name="RebootStatus" Style="{StaticResource Mist.Caption}" Margin="0,8,0,0"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Mist.Card}" Margin="0,16,0,0">
+        <StackPanel>
+          <TextBlock Style="{StaticResource Mist.H2}" Foreground="{StaticResource Mist.Accent}" Text="Diagnostics"/>
+          <DockPanel>
+            <Button Style="{StaticResource Mist.SecondaryButton}" Click="OpenData_Click">Open Launcher Data Folder</Button>
+            <Button Style="{StaticResource Mist.SecondaryButton}" Margin="10,0,0,0" Click="ResetState_Click">Reset Launcher State</Button>
+          </DockPanel>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,8,0,0"
+                     Text="State is stored in %LOCALAPPDATA%\MistXILauncher\state.json"/>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,527 @@
+<UserControl x:Class="MistXI.Launcher.Views.ProfilesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent">
+  
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="300"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Profile List -->
+    <Border Grid.Column="0" Style="{StaticResource Mist.Card}" Margin="0,0,16,0">
+      <StackPanel>
+        <TextBlock Style="{StaticResource Mist.H2}" Text="Profiles" Foreground="{StaticResource Mist.Accent}"/>
+        
+        <ListBox x:Name="ProfileList"
+                 Background="{StaticResource Mist.Panel2}"
+                 BorderThickness="0"
+                 Margin="0,12,0,0"
+                 Height="400"
+                 SelectionChanged="ProfileList_SelectionChanged">
+          <ListBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem">
+              <Setter Property="Background" Value="Transparent"/>
+              <Setter Property="Foreground" Value="{StaticResource Mist.Text}"/>
+              <Setter Property="Padding" Value="12,10"/>
+              <Setter Property="Margin" Value="0,0,0,2"/>
+              <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter Property="Background" Value="{StaticResource Mist.Accent}"/>
+                  <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                  <Setter Property="Background" Value="{StaticResource Mist.Panel}"/>
+                </Trigger>
+              </Style.Triggers>
+            </Style>
+          </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+          <Button x:Name="NewProfileBtn" 
+                  Style="{StaticResource Mist.SecondaryButton}"
+                  Click="NewProfile_Click"
+                  Padding="12,8">New Profile</Button>
+          <Button x:Name="DeleteProfileBtn" 
+                  Style="{StaticResource Mist.SecondaryButton}"
+                  Click="DeleteProfile_Click"
+                  Margin="8,0,0,0"
+                  Padding="12,8">Delete</Button>
+        </StackPanel>
+        
+        <Button x:Name="SetActiveBtn"
+                Style="{StaticResource Mist.PrimaryButton}"
+                Click="SetActive_Click"
+                Margin="0,8,0,0">Set as Active Profile</Button>
+        
+        <TextBlock x:Name="ActiveProfileText"
+                   Style="{StaticResource Mist.Caption}"
+                   Margin="0,8,0,0"
+                   TextWrapping="Wrap"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Profile Settings -->
+    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+      <StackPanel x:Name="SettingsPanel" IsEnabled="False">
+        
+        <!-- Basic Info -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Profile Information" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <TextBlock Text="Profile Name" Margin="0,12,0,4"/>
+            <TextBox x:Name="ProfileNameBox" 
+                     Style="{StaticResource Mist.TextBox}"
+                     TextChanged="ProfileSettings_Changed"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Display Settings -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Display Settings" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <Grid Margin="0,12,0,0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              
+              <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                <TextBlock Text="Resolution Width" Margin="0,0,0,4"/>
+                <TextBox x:Name="ResWidthBox" 
+                         Style="{StaticResource Mist.TextBox}"
+                         TextChanged="ProfileSettings_Changed"/>
+              </StackPanel>
+              
+              <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                <TextBlock Text="Resolution Height" Margin="0,0,0,4"/>
+                <TextBox x:Name="ResHeightBox" 
+                         Style="{StaticResource Mist.TextBox}"
+                         TextChanged="ProfileSettings_Changed"/>
+              </StackPanel>
+            </Grid>
+            
+            <!-- Window Mode -->
+            <StackPanel Margin="0,12,0,0">
+              <TextBlock Text="Window Mode" 
+                         Style="{StaticResource Mist.Caption}" 
+                         Margin="0,0,0,4"/>
+              <ComboBox x:Name="WindowModeCombo" 
+                        Style="{StaticResource Mist.ComboBox}"
+                        SelectionChanged="ProfileSettings_Changed">
+                <ComboBoxItem Content="Fullscreen" Tag="0"/>
+                <ComboBoxItem Content="Windowed" Tag="1"/>
+                <ComboBoxItem Content="Borderless Windowed" Tag="3" IsSelected="True"/>
+              </ComboBox>
+              <TextBlock Style="{StaticResource Mist.Caption}" 
+                         Margin="0,4,0,0"
+                         Foreground="#888"
+                         Text="Fullscreen = exclusive. Windowed = with borders. Borderless = fullscreen window (recommended)"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Graphics Settings -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Graphics Quality" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <TextBlock Text="Overall Quality (0-6)" Margin="0,12,0,4"/>
+            <Slider x:Name="GraphicsQualitySlider"
+                    Minimum="0" Maximum="6" 
+                    TickFrequency="1" 
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="ProfileSettings_Changed"
+                    ToolTip="Overall graphics quality preset. 0=Lowest, 3-4=Medium, 6=Maximum"/>
+            <TextBlock x:Name="GraphicsQualityText" 
+                       Style="{StaticResource Mist.Caption}"
+                       Margin="0,4,0,12"/>
+
+            <CheckBox x:Name="HardwareMouseCheck" 
+                      Content="Hardware Mouse Cursor"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Use GPU-accelerated cursor for better performance (recommended)"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,8"
+                       Text="Improves cursor responsiveness with minimal performance impact."/>
+            
+            <CheckBox x:Name="MipMappingCheck" 
+                      Content="MipMapping"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Texture mipmap generation for smoother distant textures (recommended)"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,8"
+                       Text="Reduces texture shimmering at distance. Minimal performance cost."/>
+            
+            <CheckBox x:Name="BumpMappingCheck" 
+                      Content="Bump Mapping"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Surface detail texturing. Adds depth to surfaces but impacts performance."/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,8"
+                       Text="Performance impact: Medium. Visual improvement: Moderate."/>
+            
+            <CheckBox x:Name="EnvDiffuseCheck" 
+                      Content="Environment Diffuse Mapping"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Advanced lighting effects. Highest performance impact."/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,0"
+                       Text="Performance impact: High. Only enable on powerful GPUs."/>
+          </StackPanel>
+        </Border>
+
+        <!-- Advanced Graphics -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Advanced Graphics" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <TextBlock Text="Back Buffer Count" Margin="0,12,0,4"/>
+            <TextBox x:Name="BackBufferCountBox" 
+                     Style="{StaticResource Mist.TextBox}"
+                     TextChanged="ProfileSettings_Changed"
+                     ToolTip="Number of back buffers for rendering. -1=Auto (recommended), 1=Single, 2=Double, 3=Triple buffering"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,2,0,0"
+                       Text="Values: -1 (Auto), 1, 2, 3. Higher = smoother but more latency."/>
+            
+            <TextBlock Text="Multi-Sample Type (Anti-Aliasing)" Margin="0,12,0,4"/>
+            <TextBox x:Name="MultiSampleTypeBox" 
+                     Style="{StaticResource Mist.TextBox}"
+                     TextChanged="ProfileSettings_Changed"
+                     ToolTip="Anti-aliasing samples. -1=Disabled, 2/4/8/16=MSAA levels. Higher = smoother edges but slower."/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,2,0,0"
+                       Text="Values: -1 (Off), 2, 4, 8, 16. Only use values your GPU supports!"/>
+            
+            <TextBlock Text="Frame Rate Cap (FPS Addon)" Margin="0,12,0,4"/>
+            <ComboBox x:Name="FpsCapCombo" 
+                     Style="{StaticResource Mist.ComboBox}"
+                     SelectionChanged="FpsCap_Changed"
+                     ToolTip="Uses Ashita's FPS addon. Default (no command) = 30 FPS. /fps 1 = 60 FPS (recommended). /fps 2 = 30 FPS (forced).">
+              <ComboBoxItem Content="30 FPS (Default)" Tag="0"/>
+              <ComboBoxItem Content="60 FPS (Recommended)" Tag="1"/>
+              <ComboBoxItem Content="30 FPS (Forced)" Tag="2"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,2,0,0"
+                       Text="Default = 30 FPS (no command). 60 FPS adds '/fps 1' to default.txt (recommended). Don't use /fps 0 - breaks animations!"/>
+            
+            <TextBlock Text="Presentation Interval (VSync)" Margin="0,12,0,4"/>
+            <ComboBox x:Name="PresentationIntervalCombo" 
+                     Style="{StaticResource Mist.ComboBox}"
+                     SelectionChanged="ProfileSettings_Changed"
+                     ToolTip="VSync behavior. -1 (Auto) is recommended. 0 = No VSync (tearing), 1 = VSync at refresh rate">
+              <ComboBoxItem Content="-1 (Auto - Recommended)" Tag="-1"/>
+              <ComboBoxItem Content="0 (Immediate - No VSync)" Tag="0"/>
+              <ComboBoxItem Content="1 (VSync)" Tag="1"/>
+              <ComboBoxItem Content="2 (Half Refresh)" Tag="2"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,2,0,0"
+                       Text="Controls screen tearing vs input latency. Auto is recommended."/>
+            
+            <TextBlock Text="Map Compression Type (0-2)" Margin="0,12,0,4"/>
+            <ComboBox x:Name="MapCompressionCombo"
+                      Style="{StaticResource Mist.ComboBox}"
+                      SelectionChanged="ProfileSettings_Changed">
+              <ComboBoxItem Content="0 - Uncompressed"/>
+              <ComboBoxItem Content="1 - Compressed" IsSelected="True"/>
+              <ComboBoxItem Content="2 - High Compression"/>
+            </ComboBox>
+          </StackPanel>
+        </Border>
+
+        <!-- Audio Settings -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Audio Settings" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <TextBlock Text="Sound Effects Volume (12-20)" Margin="0,12,0,4"/>
+            <Slider x:Name="SoundVolumeSlider"
+                    Minimum="12" Maximum="20"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="ProfileSettings_Changed"
+                    ToolTip="Maximum number of concurrent sound effects. Higher = more sounds can play at once."/>
+            <TextBlock x:Name="SoundVolumeText"
+                       Style="{StaticResource Mist.Caption}"
+                       Margin="0,4,0,8"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,12"
+                       Text="20 = Highest quality (recommended). Lower only if experiencing audio issues."/>
+            
+            <CheckBox x:Name="SoundEnabledCheck" 
+                      Content="Sound Enabled"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Master audio on/off switch"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Completely enables or disables all game audio."/>
+            
+            <CheckBox x:Name="SoundAlwaysOnCheck" 
+                      Content="Sound Always On (Background)"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Play sound when game window is not focused"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,0"
+                       Text="Hear the game even when alt-tabbed. Useful for hearing tells and events."/>
+          </StackPanel>
+        </Border>
+
+        <!-- Input Settings -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Input Settings" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <TextBlock Text="Keyboard" FontWeight="SemiBold" Margin="0,12,0,8" Foreground="{StaticResource Mist.Teal}"/>
+            
+            <CheckBox x:Name="KeyboardBlockBindsDuringInputCheck" 
+                      Content="Block Keybinds While Typing"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Prevents keybinds from triggering while typing in chat or editing text"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Recommended ON to avoid accidental commands while chatting."/>
+            
+            <CheckBox x:Name="KeyboardSilentBindsCheck" 
+                      Content="Silent Keybinds"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Hide keybind messages in chat log"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="When ON, keybind activity won't spam your chat log."/>
+            
+            <CheckBox x:Name="KeyboardWindowsKeyEnabledCheck" 
+                      Content="Enable Windows Key"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Allow Windows key to open Start menu"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Keep OFF to prevent accidentally opening Start menu during gameplay."/>
+            
+            <TextBlock Text="Mouse" FontWeight="SemiBold" Margin="0,12,0,8" Foreground="{StaticResource Mist.Teal}"/>
+            
+            <CheckBox x:Name="MouseUnhookCheck" 
+                      Content="Mouse Unhook"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Prevent game from automatically repositioning mouse"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Always keep ON for smooth, natural mouse control."/>
+            
+            <TextBlock Text="Gamepad" FontWeight="SemiBold" Margin="0,12,0,8" Foreground="{StaticResource Mist.Teal}"/>
+            
+            <CheckBox x:Name="GamepadAllowBackgroundCheck" 
+                      Content="Allow Gamepad in Background"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Controller still works when game window is not focused"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Enable if you want controller to work while alt-tabbed."/>
+            
+            <CheckBox x:Name="GamepadDisableEnumerationCheck" 
+                      Content="Disable Controller Scanning"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Stop game from scanning for controllers"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,0"
+                       Text="Turn ON if you get micro-stutters but don't use a controller."/>
+          </StackPanel>
+        </Border>
+
+        <!-- Visual Settings -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Visual Settings" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <CheckBox x:Name="ShowOpeningMovieCheck" 
+                      Content="Show Opening Movie"
+                      Margin="0,12,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Play intro movie on game start"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Keep OFF to skip intro and get to character select faster."/>
+            
+            <CheckBox x:Name="SimplifiedCharCreationCheck" 
+                      Content="Simplified Character Creation"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Reduce visual effects during character creation"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Only needed on very old systems. Keep OFF for full visuals."/>
+            
+            <CheckBox x:Name="MaintainAspectRatioCheck" 
+                      Content="Maintain Aspect Ratio"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Force aspect ratio when resizing window"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Prevents window stretching. Keep OFF for flexible windowing."/>
+            
+            <TextBlock Text="Gamma Adjustment" Margin="0,12,0,4"/>
+            <Slider x:Name="GammaSlider"
+                    Minimum="-50" Maximum="50"
+                    TickFrequency="5"
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="ProfileSettings_Changed"
+                    ToolTip="Screen brightness adjustment. 0 = default"/>
+            <TextBlock x:Name="GammaText"
+                       Style="{StaticResource Mist.Caption}"
+                       Margin="0,4,0,0"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,2,0,0"
+                       Text="Negative = darker, Positive = brighter, 0 = default"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Developer/Debug Settings -->
+        <Border Style="{StaticResource Mist.Card}" Margin="0,0,0,16">
+          <StackPanel>
+            <TextBlock Style="{StaticResource Mist.H2}" Text="Developer / Debug" Foreground="{StaticResource Mist.Accent}"/>
+            
+            <TextBlock Text="Log Level" Margin="0,12,0,4"/>
+            <ComboBox x:Name="LogLevelCombo" 
+                     Style="{StaticResource Mist.ComboBox}"
+                     SelectionChanged="ProfileSettings_Changed"
+                     ToolTip="Amount of debugging information to log">
+              <ComboBoxItem Content="0 - None" Tag="0"/>
+              <ComboBoxItem Content="1 - Critical Only" Tag="1"/>
+              <ComboBoxItem Content="2 - Errors" Tag="2"/>
+              <ComboBoxItem Content="3 - Warnings" Tag="3"/>
+              <ComboBoxItem Content="4 - Info" Tag="4"/>
+              <ComboBoxItem Content="5 - Debug (Recommended)" Tag="5" IsSelected="True"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="0,2,0,12"
+                       Text="5 (Debug) gives most detail for troubleshooting. Lower for less log spam."/>
+            
+            <CheckBox x:Name="CrashDumpsCheck" 
+                      Content="Generate Crash Dumps"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Create dump files when crashes occur"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="Keep ON to help diagnose crashes and bugs."/>
+            
+            <CheckBox x:Name="AddonsSilentCheck" 
+                      Content="Silent Addon Loading"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Hide addon load/unload messages in chat"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,12"
+                       Text="When ON, stops addon activity from spamming chat log."/>
+            
+            <CheckBox x:Name="PluginsSilentCheck" 
+                      Content="Silent Plugin Loading"
+                      Margin="0,0,0,4"
+                      Checked="ProfileSettings_Changed"
+                      Unchecked="ProfileSettings_Changed"
+                      ToolTip="Hide plugin load/unload messages in chat"/>
+            <TextBlock Style="{StaticResource Mist.Caption}" 
+                       Foreground="{StaticResource Mist.TextDim}"
+                       TextWrapping="Wrap"
+                       Margin="20,0,0,0"
+                       Text="When ON, stops plugin activity from spamming chat log."/>
+          </StackPanel>
+        </Border>
+
+        <!-- Save Button -->
+        <Button x:Name="SaveProfileBtn"
+                Style="{StaticResource Mist.PrimaryButton}"
+                Click="SaveProfile_Click"
+                IsEnabled="False">Save Profile</Button>
+        
+        <TextBlock x:Name="SaveStatusText"
+                   Style="{StaticResource Mist.Caption}"
+                   Margin="0,12,0,0"/>
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>
