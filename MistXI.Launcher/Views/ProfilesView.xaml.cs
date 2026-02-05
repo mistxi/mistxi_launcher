@@ -357,12 +357,12 @@ public partial class ProfilesView : UserControl
 
         // Regenerate the mistxi.txt script with addons + FPS commands
         var ashitaDir = Path.Combine(_svc.BaseDir, "runtime", "ashita");
-        var scriptsDir = Path.Combine(ashitaDir, "scripts");
-        Directory.CreateDirectory(scriptsDir);
+        Directory.CreateDirectory(ashitaDir);
         
         try
         {
-            var scriptPath = Path.Combine(scriptsDir, "mistxi.txt");
+            // Write to ashita root directory (Ashita v4 changed script location)
+            var scriptPath = Path.Combine(ashitaDir, "mistxi.txt");
             var script = _svc.AddonManager.GenerateAshitaScript(
                 _currentProfile.EnabledAddons,
                 _currentProfile.EnabledPlugins,

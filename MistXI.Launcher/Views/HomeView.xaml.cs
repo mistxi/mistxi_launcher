@@ -39,6 +39,54 @@ public partial class HomeView : UserControl
     
     private async void HomeView_Loaded(object sender, RoutedEventArgs e)
     {
+        // Check for launcher updates first
+        try
+        {
+            var updateInfo = await _svc.Updater.CheckForUpdateAsync();
+            if (updateInfo != null)
+            {
+                var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                var currentVersionStr = currentVersion != null ? $"{currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}" : "1.1.0";
+                
+                var result = MessageBox.Show(
+                    $"A new version of the MistXI Launcher is available!\n\n" +
+                    $"Current Version: {currentVersionStr}\n" +
+                    $"Latest Version: {updateInfo.Version}\n\n" +
+                    $"Release Notes:\n{updateInfo.ReleaseNotes.Substring(0, Math.Min(200, updateInfo.ReleaseNotes.Length))}...\n\n" +
+                    $"Would you like to update now?",
+                    "Update Available",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information
+                );
+                
+                if (result == MessageBoxResult.Yes)
+                {
+                    StatusLine.Text = "Status: Downloading launcher update...";
+                    var success = await _svc.Updater.DownloadAndApplyUpdateAsync(
+                        updateInfo.DownloadUrl, 
+                        new Progress<string>(s => StatusLine.Text = $"Status: {s}")
+                    );
+                    
+                    if (!success)
+                    {
+                        MessageBox.Show(
+                            "Failed to apply update. Please download manually from GitHub.",
+                            "Update Failed",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning
+                        );
+                    }
+                    // If successful, launcher will restart automatically
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _svc.Logger.Write("Failed to check for launcher updates", ex);
+            // Non-fatal, continue loading
+        }
+        
         var ashitaDir = Path.Combine(_svc.BaseDir, "runtime", "ashita");
         var ashitaExe = Path.Combine(ashitaDir, "Ashita-cli.exe");
         var xiloaderPath = Path.Combine(ashitaDir, "bootloader", "xiloader.exe");
@@ -219,6 +267,39 @@ public partial class HomeView : UserControl
                     MessageBoxImage.Error
                 );
                 return;
+            }
+            
+            // Generate mistxi.txt script from active profile
+            // This ensures the script exists even after Ashita updates wipe the scripts folder
+            StatusLine.Text = "Status: Generating addon script...";
+            try
+            {
+                var scriptsDir = Path.Combine(ashitaDir, "scripts");
+                Directory.CreateDirectory(scriptsDir);
+                var scriptPath = Path.Combine(scriptsDir, "mistxi.txt");
+                
+                if (activeProfile != null && activeProfile.Name != null)
+                {
+                    var script = _svc.AddonManager.GenerateAshitaScript(
+                        activeProfile.EnabledAddons,
+                        activeProfile.EnabledPlugins,
+                        activeProfile.FpsCap
+                    );
+                    
+                    File.WriteAllText(scriptPath, script);
+                    _svc.Logger.Write($"Generated mistxi.txt for profile '{activeProfile.Name}' at: {scriptPath}");
+                }
+                else
+                {
+                    // No active profile, create empty script
+                    File.WriteAllText(scriptPath, "# No active profile - empty script\n");
+                    _svc.Logger.Write("No active profile found, created empty mistxi.txt");
+                }
+            }
+            catch (Exception ex)
+            {
+                _svc.Logger.Write("Failed to generate mistxi.txt script", ex);
+                // Non-fatal - continue launching
             }
             
             StatusLine.Text = "Status: Launching…";

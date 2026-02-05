@@ -18,6 +18,11 @@ public partial class MainWindow : Window
         {
             InitializeComponent();
             Services = AppServices.Create();
+            
+            // Set version from assembly
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            var versionStr = version != null ? $"v{version.Major}.{version.Minor}.{version.Build}" : "v1.1.0";
+            VersionText.Text = versionStr;
 
             // Check if this is first run
             var state = Services.StateStore.Load();

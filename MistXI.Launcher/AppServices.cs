@@ -18,6 +18,7 @@ public sealed class AppServices
     public required AshitaAddonManager AddonManager { get; init; }
     public required PlayOnlineService PlayOnline { get; init; }
     public required FfxiInstallerService FfxiInstaller { get; init; }
+    public required LauncherUpdater Updater { get; init; }
 
     public static AppServices Create()
     {
@@ -42,7 +43,8 @@ public sealed class AppServices
             FfxiDetector = new FfxiDetector(),
             AddonManager = new AshitaAddonManager(),
             PlayOnline = new PlayOnlineService(logger),
-            FfxiInstaller = new FfxiInstallerService(http, logger)
+            FfxiInstaller = new FfxiInstallerService(http, logger),
+            Updater = new LauncherUpdater(logger)
         };
     }
 }

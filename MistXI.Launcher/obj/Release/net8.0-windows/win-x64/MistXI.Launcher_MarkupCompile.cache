@@ -1,5 +1,5 @@
 ﻿MistXI.Launcher
-1.1.0.0
+1.1.2.0
 
 winexe
 C#
@@ -12,7 +12,7 @@ TRACE;RELEASE;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_
 C:\Users\corey\Desktop\MistXI.Launcher\App.xaml
 759296290
 
-24-1526530931
+25796767919
 199-902901091
 FirstRunWizard.xaml;MainWindow.xaml;Themes\MistTheme.xaml;Views\AddonsView.xaml;Views\HomeView.xaml;Views\ProfilesView.xaml;Views\SettingsView.xaml;
 

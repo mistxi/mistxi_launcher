@@ -50,7 +50,7 @@
 
     <DockPanel Grid.Row="2">
       <TextBlock x:Name="StatusText" Foreground="{StaticResource Mist.TextDim}" />
-      <TextBlock Text="v1.1.1" Foreground="{StaticResource Mist.TextDim}" DockPanel.Dock="Right"/>
+      <TextBlock x:Name="VersionText" Foreground="{StaticResource Mist.TextDim}" DockPanel.Dock="Right"/>
     </DockPanel>
   </Grid>
 </Window>
