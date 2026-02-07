@@ -163,7 +163,7 @@ namespace MistXI.Launcher {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MistXI.Launcher;V1.1.2.0;component/firstrunwizard.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MistXI.Launcher;V1.2.1.0;component/firstrunwizard.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\FirstRunWizard.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

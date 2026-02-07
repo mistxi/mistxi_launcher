@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj": {
-      "version": "1.1.2",
+      "version": "1.2.1",
       "restore": {
         "projectUniqueName": "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj",
         "projectName": "MistXI.Launcher",
@@ -104,7 +104,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
