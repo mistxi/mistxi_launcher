@@ -25,10 +25,24 @@ public sealed class GitHubXiLoaderService
         public List<ReleaseAsset>? assets { get; set; }
     }
 
-    public async Task<string> EnsureLatestXiLoaderAsync(string destExePath, IProgress<string>? progress = null, CancellationToken ct = default)
+    public async Task<string> EnsureLatestXiLoaderAsync(string destExePath, IProgress<string>? progress = null, CancellationToken ct = default, string? versionOverride = null)
     {
-        progress?.Report("Checking latest XiLoader release…");
-        var rel = await GetLatestReleaseAsync(ct);
+        progress?.Report("Checking XiLoader release…");
+        
+        // Treat null, empty, or non-tag strings (e.g. "Latest (default)") as "use latest"
+        var useOverride = !string.IsNullOrWhiteSpace(versionOverride) 
+                          && versionOverride.StartsWith("v", StringComparison.OrdinalIgnoreCase);
+        
+        Release rel;
+        if (useOverride)
+        {
+            progress?.Report($"Using pinned XiLoader version: {versionOverride}");
+            rel = await GetReleaseByTagAsync(versionOverride!, ct);
+        }
+        else
+        {
+            rel = await GetLatestReleaseAsync(ct);
+        }
 
         if (rel.assets is null || rel.assets.Count == 0)
             throw new InvalidOperationException("Latest XiLoader release has no assets.");
@@ -65,6 +79,36 @@ public sealed class GitHubXiLoaderService
         resp.EnsureSuccessStatusCode();
         var json = await resp.Content.ReadAsStringAsync(ct);
         return JsonSerializer.Deserialize<Release>(json) ?? throw new InvalidOperationException("Failed to parse GitHub release JSON.");
+    }
+    
+    private async Task<Release> GetReleaseByTagAsync(string tag, CancellationToken ct)
+    {
+        var url = $"https://api.github.com/repos/LandSandBoat/xiloader/releases/tags/{tag}";
+        using var resp = await _http.GetAsync(url, ct);
+        resp.EnsureSuccessStatusCode();
+        var json = await resp.Content.ReadAsStringAsync(ct);
+        return JsonSerializer.Deserialize<Release>(json) ?? throw new InvalidOperationException("Failed to parse GitHub release JSON.");
+    }
+    
+    public async Task<List<string>> GetRecentReleaseTagsAsync(int count = 5, CancellationToken ct = default)
+    {
+        try
+        {
+            const string url = "https://api.github.com/repos/LandSandBoat/xiloader/releases";
+            using var resp = await _http.GetAsync(url, ct);
+            resp.EnsureSuccessStatusCode();
+            var json = await resp.Content.ReadAsStringAsync(ct);
+            var releases = JsonSerializer.Deserialize<List<Release>>(json) ?? new();
+            return releases
+                .Where(r => !string.IsNullOrEmpty(r.tag_name))
+                .Take(count)
+                .Select(r => r.tag_name!)
+                .ToList();
+        }
+        catch
+        {
+            return new List<string>();
+        }
     }
 
     private static async Task DownloadAsync(string url, string outPath, CancellationToken ct)

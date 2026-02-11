@@ -100,7 +100,7 @@ public partial class HomeView : UserControl
             try
             {
                 await _svc.Ashita.EnsureLatestAshitaAsync(ashitaDir, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None);
-                await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None);
+                await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None, _state.XiLoaderVersion);
                 
                 StatusLine.Text = "Status: Ready to launch";
             }
@@ -228,7 +228,7 @@ public partial class HomeView : UserControl
             var xiloaderPath = Path.Combine(bootloaderDir, "xiloader.exe");
 
             StatusLine.Text = "Status: Downloading/updating XiLoader…";
-            await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = "Status: " + s), _cts.Token);
+            await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = "Status: " + s), _cts.Token, _state.XiLoaderVersion);
 
             var iniText = _svc.Ini.BuildMistIni(_state.FfxiDir!, ServerHost,
                 string.IsNullOrWhiteSpace(user) ? null : user,

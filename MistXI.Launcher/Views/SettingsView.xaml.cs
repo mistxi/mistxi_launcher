@@ -25,6 +25,15 @@ public partial class SettingsView : UserControl
         ValidatePaths();
         
         FfxiPathBox.TextChanged += (s, e) => ValidatePaths();
+        
+        // Populate XiLoader version dropdown - only fetch from GitHub once
+        Loaded += async (s, e) =>
+        {
+            if (XiLoaderVersionCombo.Items.Count == 0)
+                await LoadXiLoaderVersionsAsync();
+            else
+                RestoreXiLoaderSelection(); // Just re-apply saved selection
+        };
     }
 
     private void BrowseFfxi_Click(object sender, RoutedEventArgs e)
@@ -760,6 +769,112 @@ public partial class SettingsView : UserControl
 
         var ok = _svc.RebootGate.HasRebootedSince(_state.PendingRebootAtUtc);
         RebootStatus.Text = ok ? "Reboot gate: satisfied (boot time is after marker)." : "Reboot gate: reboot still required.";
+    }
+
+    private bool _xiLoaderComboLoading = false;
+
+    private void RestoreXiLoaderSelection()
+    {
+        _state = _svc.StateStore.Load();
+        
+        // Sanitize: clear any saved value that isn't a real tag (e.g. "Latest (default)" from old versions)
+        if (!string.IsNullOrWhiteSpace(_state.XiLoaderVersion) && 
+            !_state.XiLoaderVersion.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+        {
+            _state.XiLoaderVersion = null;
+            _svc.StateStore.Save(_state);
+        }
+        
+        _xiLoaderComboLoading = true;
+        
+        if (!string.IsNullOrEmpty(_state.XiLoaderVersion))
+        {
+            var match = XiLoaderVersionCombo.Items.Cast<ComboBoxItem>()
+                .FirstOrDefault(i => i.Content as string == _state.XiLoaderVersion);
+            XiLoaderVersionCombo.SelectedItem = match ?? XiLoaderVersionCombo.Items[0];
+        }
+        else
+        {
+            XiLoaderVersionCombo.SelectedIndex = 0;
+        }
+        
+        _xiLoaderComboLoading = false;
+    }
+
+    private static ComboBoxItem MakeComboItem(string text) => new ComboBoxItem { Content = text };
+
+    private async Task LoadXiLoaderVersionsAsync()
+    {
+        _xiLoaderComboLoading = true;
+        XiLoaderRefreshBtn.IsEnabled = false;
+        XiLoaderVersionCombo.IsEnabled = false;
+        XiLoaderVersionCombo.Items.Clear();
+        XiLoaderVersionCombo.Items.Add(MakeComboItem("Loading..."));
+        XiLoaderVersionCombo.SelectedIndex = 0;
+
+        try
+        {
+            var tags = await _svc.XiLoader.GetRecentReleaseTagsAsync(5);
+
+            XiLoaderVersionCombo.Items.Clear();
+            XiLoaderVersionCombo.Items.Add(MakeComboItem("Latest (default)"));
+
+            foreach (var tag in tags)
+                XiLoaderVersionCombo.Items.Add(MakeComboItem(tag));
+
+            // Select saved override or default
+            if (!string.IsNullOrEmpty(_state.XiLoaderVersion))
+            {
+                var match = XiLoaderVersionCombo.Items.Cast<ComboBoxItem>()
+                    .FirstOrDefault(i => i.Content as string == _state.XiLoaderVersion);
+                XiLoaderVersionCombo.SelectedItem = match ?? XiLoaderVersionCombo.Items[0];
+            }
+            else
+            {
+                XiLoaderVersionCombo.SelectedIndex = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            _svc.Logger.Write("Failed to fetch XiLoader releases", ex);
+            XiLoaderVersionCombo.Items.Clear();
+            XiLoaderVersionCombo.Items.Add(MakeComboItem("Failed to load - check connection"));
+            XiLoaderVersionCombo.SelectedIndex = 0;
+        }
+        finally
+        {
+            XiLoaderRefreshBtn.IsEnabled = true;
+            XiLoaderVersionCombo.IsEnabled = true;
+            _xiLoaderComboLoading = false;
+        }
+    }
+
+    private async void XiLoaderRefresh_Click(object sender, RoutedEventArgs e)
+    {
+        await LoadXiLoaderVersionsAsync();
+    }
+
+    private void XiLoaderVersion_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_xiLoaderComboLoading) return;
+        if (XiLoaderVersionCombo.SelectedItem is not ComboBoxItem item) return;
+        var selected = item.Content as string;
+        if (selected == null) return;
+
+        _state = _svc.StateStore.Load();
+
+        if (selected == "Latest (default)")
+        {
+            _state.XiLoaderVersion = null;
+            _svc.Logger.Write("XiLoader version override cleared (using latest)");
+        }
+        else
+        {
+            _state.XiLoaderVersion = selected;
+            _svc.Logger.Write($"XiLoader version pinned to: {selected}");
+        }
+
+        _svc.StateStore.Save(_state);
     }
 
 }

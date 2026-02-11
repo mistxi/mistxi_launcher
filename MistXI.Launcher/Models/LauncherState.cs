@@ -19,6 +19,9 @@ public sealed class LauncherState
 
     public List<GameProfile> Profiles { get; set; } = new() { new GameProfile { Name = "Default" } };
     public string ActiveProfileName { get; set; } = "Default";
+    
+    // XiLoader version override (null = use latest)
+    public string? XiLoaderVersion { get; set; } = null;
 }
 
 public sealed class GameProfile

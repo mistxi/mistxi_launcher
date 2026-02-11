@@ -158,6 +158,21 @@
           </DockPanel>
           <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,8,0,0"
                      Text="State is stored in %LOCALAPPDATA%\MistXILauncher\state.json"/>
+          
+          <!-- XiLoader Version Override -->
+          <TextBlock Style="{StaticResource Mist.H2}" Foreground="{StaticResource Mist.Accent}" Margin="0,16,0,4" Text="XiLoader Version"/>
+          <DockPanel>
+            <Button x:Name="XiLoaderRefreshBtn"
+                    Style="{StaticResource Mist.SecondaryButton}"
+                    DockPanel.Dock="Right"
+                    Margin="8,0,0,0"
+                    Click="XiLoaderRefresh_Click">Refresh</Button>
+            <ComboBox x:Name="XiLoaderVersionCombo"
+                      Style="{StaticResource Mist.ComboBox}"
+                      SelectionChanged="XiLoaderVersion_Changed"/>
+          </DockPanel>
+          <TextBlock Style="{StaticResource Mist.Caption}" Margin="0,4,0,0" Foreground="#888"
+                     Text="Override which XiLoader version is downloaded. Use this if a new release is incompatible with MistXI."/>
         </StackPanel>
       </Border>
     </StackPanel>
