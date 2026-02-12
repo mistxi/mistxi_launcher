@@ -261,6 +261,9 @@ On every launch, the launcher:
 
 ## 📝 Changelog
 
+### v1.3.0 (February 2026)
+- ✨ Manual xiloader version selection
+
 ### v1.2.0 (February 2026)
 - ✨ Automatic self-updating launcher
 - 🐛 Fixed mistxi.txt being removed after Ashita auto-update
