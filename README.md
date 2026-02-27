@@ -2,7 +2,7 @@
 
 A modern, all-in-one launcher for the MistXI FFXI private server. Automates installation, patching, and configuration to get you playing in minutes instead of hours.
 
-![MistXI Launcher](https://img.shields.io/badge/version-1.2.0-blue)
+![MistXI Launcher](https://img.shields.io/badge/version-1.3.0-blue)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey)
 
@@ -262,15 +262,11 @@ On every launch, the launcher:
 
 ## 📝 Changelog
 
-<<<<<<< Updated upstream
-=======
-
 ### v1.4.0 BETA (March 2026)
 - ✨ Enable server selection support for launcher use on the 99 era server
 - ✨ Client/Server version auto-detection with update prompt
 - ✨ New settings page debug options to check/force client version updates
 
->>>>>>> Stashed changes
 ### v1.3.0 (February 2026)
 - ✨ Manual xiloader version selection
 
