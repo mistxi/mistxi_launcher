@@ -13,6 +13,7 @@ A modern, all-in-one launcher for the MistXI FFXI private server. Automates inst
 - **Automated Patching** - Handles DSP patch, PlayOnline updates, and data folder setup
 - **Smart Auto-Detection** - Finds existing FFXI installations (Steam or retail)
 - **First-Run Wizard** - Guided setup for new players
+- **Version Detection** - Detects client version mismatch and prompts to fix
 
 ### 🎮 Game Management
 - **Profile System** - Save unlimited configurations with different settings
@@ -261,6 +262,15 @@ On every launch, the launcher:
 
 ## 📝 Changelog
 
+<<<<<<< Updated upstream
+=======
+
+### v1.4.0 BETA (March 2026)
+- ✨ Enable server selection support for launcher use on the 99 era server
+- ✨ Client/Server version auto-detection with update prompt
+- ✨ New settings page debug options to check/force client version updates
+
+>>>>>>> Stashed changes
 ### v1.3.0 (February 2026)
 - ✨ Manual xiloader version selection
 

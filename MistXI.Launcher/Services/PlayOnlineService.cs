@@ -353,19 +353,74 @@ public sealed class PlayOnlineService
     /// <summary>
     /// Triggers a client update by deleting the 0.dat file
     /// </summary>
-    public void TriggerClientUpdate(string ffxiPath)
+    public async Task TriggerClientUpdateAsync(string ffxiPath)
     {
         var datPath = Path.Combine(ffxiPath, "ROM", "0", "0.dat");
         
-        if (File.Exists(datPath))
-        {
-            _logger.Write($"Deleting 0.dat to trigger client update: {datPath}");
-            File.Delete(datPath);
-            _logger.Write("0.dat deleted successfully - client update will trigger on next POL file check");
-        }
-        else
+        if (!File.Exists(datPath))
         {
             _logger.Write("0.dat not found - may already be deleted or client needs initial setup");
+            return;
+        }
+
+        _logger.Write($"Deleting 0.dat to trigger client update: {datPath}");
+
+        // Extract the embedded helper executable
+        var helperPath = Path.Combine(Path.GetTempPath(), "MistXI.PatchHelper.exe");
+        _logger.Write($"Extracting helper to: {helperPath}");
+        
+        using (var resourceStream = typeof(PlayOnlineService).Assembly.GetManifestResourceStream("MistXI.PatchHelper.exe"))
+        {
+            if (resourceStream == null)
+            {
+                throw new InvalidOperationException("Patch helper executable not found in launcher resources");
+            }
+
+            using var fileStream = new FileStream(helperPath, FileMode.Create, FileAccess.Write);
+            await resourceStream.CopyToAsync(fileStream);
+        }
+
+        _logger.Write($"Helper extracted successfully");
+
+        // Run the helper with elevation to delete the file
+        var psi = new ProcessStartInfo
+        {
+            FileName = helperPath,
+            Arguments = $"delete \"{datPath}\"",
+            UseShellExecute = true,
+            Verb = "runas", // Request elevation
+            CreateNoWindow = false,
+            WindowStyle = ProcessWindowStyle.Hidden
+        };
+
+        _logger.Write($"Launching helper with args: {psi.Arguments}");
+        
+        try
+        {
+            using var process = Process.Start(psi);
+            
+            if (process == null)
+            {
+                throw new InvalidOperationException("Failed to start patch helper");
+            }
+
+            await Task.Run(() => process.WaitForExit());
+            _logger.Write($"Helper exited with code: {process.ExitCode}");
+
+            if (process.ExitCode == 0)
+            {
+                _logger.Write("0.dat deleted successfully - client update will trigger on next POL file check");
+            }
+            else
+            {
+                throw new InvalidOperationException($"Helper failed with exit code {process.ExitCode}");
+            }
+        }
+        catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 1223)
+        {
+            // User cancelled UAC prompt
+            _logger.Write("User cancelled elevation prompt");
+            throw new OperationCanceledException("Administrator privileges required but elevation was cancelled by user");
         }
     }
 

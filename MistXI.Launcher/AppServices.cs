@@ -19,6 +19,7 @@ public sealed class AppServices
     public required PlayOnlineService PlayOnline { get; init; }
     public required FfxiInstallerService FfxiInstaller { get; init; }
     public required LauncherUpdater Updater { get; init; }
+    public required VersionService Version { get; init; }
 
     public static AppServices Create()
     {
@@ -44,7 +45,8 @@ public sealed class AppServices
             AddonManager = new AshitaAddonManager(),
             PlayOnline = new PlayOnlineService(logger),
             FfxiInstaller = new FfxiInstallerService(http, logger),
-            Updater = new LauncherUpdater(logger)
+            Updater = new LauncherUpdater(logger),
+            Version = new VersionService(logger)
         };
     }
 }

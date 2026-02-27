@@ -22,6 +22,9 @@ public sealed class LauncherState
     
     // XiLoader version override (null = use latest)
     public string? XiLoaderVersion { get; set; } = null;
+    
+    // Selected server
+    public string SelectedServer { get; set; } = "play.mistxi.com";
 }
 
 public sealed class GameProfile

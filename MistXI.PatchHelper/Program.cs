@@ -9,16 +9,18 @@ namespace MistXI.PatchHelper;
 /// Usage: 
 ///   MistXI.PatchHelper.exe dsp <zipPath> <ffxiPath>
 ///   MistXI.PatchHelper.exe copy <sourcePath> <destPath>
+///   MistXI.PatchHelper.exe delete <filePath>
 /// </summary>
 class Program
 {
     static int Main(string[] args)
     {
-        if (args.Length < 2)
+        if (args.Length < 1)
         {
             Console.Error.WriteLine("Usage:");
             Console.Error.WriteLine("  MistXI.PatchHelper.exe dsp <zipPath> <ffxiPath>");
             Console.Error.WriteLine("  MistXI.PatchHelper.exe copy <sourcePath> <destPath>");
+            Console.Error.WriteLine("  MistXI.PatchHelper.exe delete <filePath>");
             return 1;
         }
 
@@ -30,6 +32,7 @@ class Program
             {
                 "dsp" => InstallDspPatch(args),
                 "copy" => CopyDataFolder(args),
+                "delete" => DeleteFile(args),
                 _ => InvalidOperation(operation)
             };
         }
@@ -44,7 +47,7 @@ class Program
     static int InvalidOperation(string operation)
     {
         Console.Error.WriteLine($"ERROR: Unknown operation '{operation}'");
-        Console.Error.WriteLine("Valid operations: dsp, copy");
+        Console.Error.WriteLine("Valid operations: dsp, copy, delete");
         return 1;
     }
 
@@ -204,5 +207,41 @@ class Program
         Console.WriteLine($"Successfully copied {copiedCount} files");
         Console.WriteLine("Data folder copy complete!");
         return 0;
+    }
+
+    static int DeleteFile(string[] args)
+    {
+        if (args.Length != 2)
+        {
+            Console.Error.WriteLine("Usage: MistXI.PatchHelper.exe delete <filePath>");
+            return 1;
+        }
+
+        var filePath = args[1];
+
+        Console.WriteLine($"Deleting file: {filePath}");
+
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine($"File does not exist (already deleted?): {filePath}");
+            return 0; // Not an error - file is already gone
+        }
+
+        try
+        {
+            File.Delete(filePath);
+            Console.WriteLine("File deleted successfully!");
+            return 0;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Console.Error.WriteLine($"ERROR: Access denied. File may be in use or protected.");
+            return 2;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"ERROR: Failed to delete file: {ex.Message}");
+            return 3;
+        }
     }
 }

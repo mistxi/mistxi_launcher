@@ -181,7 +181,7 @@ C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\cre
 C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\hostfxr.dll
 C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\hostpolicy.dll
 C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\mscordaccore.dll
-C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.2325.60607.dll
+C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.2426.7010.dll
 C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\mscordbi.dll
 C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\mscorrc.dll
 C:\Users\corey\Desktop\MistXI.PatchHelper\bin\Release\net8.0-windows\win-x64\msquic.dll

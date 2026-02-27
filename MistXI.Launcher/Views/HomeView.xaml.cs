@@ -10,14 +10,14 @@ public partial class HomeView : UserControl
 {
     private readonly AppServices _svc;
     private LauncherState _state;
-    private const string ServerHost = "play.mistxi.com";
+    private const string DefaultServer = "play.mistxi.com";
     private CancellationTokenSource? _cts;
 
     public HomeView(AppServices services)
     {
-        InitializeComponent();
         _svc = services;
         _state = _svc.StateStore.Load();
+        InitializeComponent();
 
         // Populate profile dropdown
         LoadProfiles();
@@ -30,6 +30,16 @@ public partial class HomeView : UserControl
             {
                 PassBox.Password = pass;
                 SaveCredsCheck.IsChecked = true;
+            }
+        }
+        
+        // Restore server selection
+        foreach (ComboBoxItem item in ServerCombo.Items)
+        {
+            if (item.Tag as string == _state.SelectedServer)
+            {
+                ServerCombo.SelectedItem = item;
+                break;
             }
         }
         
@@ -85,6 +95,38 @@ public partial class HomeView : UserControl
         {
             _svc.Logger.Write("Failed to check for launcher updates", ex);
             // Non-fatal, continue loading
+        }
+        
+        // Check for client version mismatch
+        if (!string.IsNullOrWhiteSpace(_state.FfxiDir))
+        {
+            try
+            {
+                var mismatch = await _svc.Version.CheckVersionMismatchAsync(_state.FfxiDir);
+                if (mismatch == true)
+                {
+                    var result = MessageBox.Show(
+                        "Client version mismatch detected!\n\n" +
+                        "The server has been updated and your client is out of date.\n\n" +
+                        "You'll need to update your client before you can play.\n\n" +
+                        "Fix this now?",
+                        "Version Mismatch",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning
+                    );
+                    
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Trigger the fix
+                        await AutoFixVersionMismatchAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _svc.Logger.Write("Failed to check client version", ex);
+                // Non-fatal, continue
+            }
         }
         
         var ashitaDir = Path.Combine(_svc.BaseDir, "runtime", "ashita");
@@ -159,6 +201,16 @@ public partial class HomeView : UserControl
         }
     }
 
+    private void ServerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ServerCombo.SelectedItem is ComboBoxItem item && item.Tag is string host)
+        {
+            _state.SelectedServer = host;
+            _svc.StateStore.Save(_state);
+            _svc.Logger.Write($"Server changed to: {host}");
+        }
+    }
+
     private void UpdateProfileSummary(GameProfile profile)
     {
         ProfileSummary.Text = $"{profile.ResolutionWidth}x{profile.ResolutionHeight} • " +
@@ -205,6 +257,42 @@ public partial class HomeView : UserControl
                 return;
             }
 
+            // Check for version mismatch BEFORE launching
+            StatusLine.Text = "Status: Checking client version...";
+            try
+            {
+                var mismatch = await _svc.Version.CheckVersionMismatchAsync(_state.FfxiDir);
+                if (mismatch == true)
+                {
+                    var result = MessageBox.Show(
+                        "🚨 Client Version Mismatch!\n\n" +
+                        "Your client is out of date and needs to be updated.\n\n" +
+                        "The game will fail to launch with a POL-3331 error if you continue.\n\n" +
+                        "Would you like to fix this now?",
+                        "Update Required",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning
+                    );
+                    
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await AutoFixVersionMismatchAsync();
+                        return; // Don't launch game
+                    }
+                    else
+                    {
+                        StatusLine.Text = "Status: Launch cancelled - version mismatch";
+                        return; // Don't launch game
+                    }
+                }
+                // If mismatch is null (can't detect) or false (versions match), continue with launch
+            }
+            catch (Exception versionEx)
+            {
+                _svc.Logger.Write("Version check failed (non-fatal, continuing)", versionEx);
+                // Continue with launch - version check is best-effort
+            }
+
             var user = UserBox.Text.Trim();
             var pass = PassBox.Password;
 
@@ -230,7 +318,7 @@ public partial class HomeView : UserControl
             StatusLine.Text = "Status: Downloading/updating XiLoader…";
             await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = "Status: " + s), _cts.Token, _state.XiLoaderVersion);
 
-            var iniText = _svc.Ini.BuildMistIni(_state.FfxiDir!, ServerHost,
+            var iniText = _svc.Ini.BuildMistIni(_state.FfxiDir!, _state.SelectedServer,
                 string.IsNullOrWhiteSpace(user) ? null : user,
                 string.IsNullOrWhiteSpace(pass) ? null : pass,
                 activeProfile); // Pass the active profile
@@ -332,6 +420,39 @@ public partial class HomeView : UserControl
                 // Request elevation because Ashita needs to inject into FFXI process
                 _svc.Proc.Start(ashitaExe, $"\"{iniName}\"", ashitaDir, requireElevation: true);
                 StatusLine.Text = "Status: Game launched successfully!";
+                
+                // Monitor for version mismatch errors in background
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var errorDetected = await _svc.Version.MonitorForVersionErrorAsync();
+                        if (errorDetected)
+                        {
+                            // Run on UI thread
+                            await Dispatcher.InvokeAsync(async () =>
+                            {
+                                var result = MessageBox.Show(
+                                    "The game failed to start.\n\n" +
+                                    "This is likely a version mismatch (POL-3331 error).\n\n" +
+                                    "Would you like to automatically fix this?",
+                                    "Version Error Detected",
+                                    MessageBoxButton.YesNo,
+                                    MessageBoxImage.Warning
+                                );
+                                
+                                if (result == MessageBoxResult.Yes)
+                                {
+                                    await AutoFixVersionMismatchAsync();
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception monitorEx)
+                    {
+                        _svc.Logger.Write("Version monitoring failed", monitorEx);
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -499,6 +620,62 @@ private void ViewNews_Click(object sender, RoutedEventArgs e)
     catch (Exception ex)
     {
         _svc.Logger.Write("ViewNews_Click failed", ex);
+    }
+}
+
+private async Task AutoFixVersionMismatchAsync()
+{
+    try
+    {
+        StatusLine.Text = "Status: Fixing version mismatch...";
+        
+        // Delete 0.DAT to trigger update (with elevation)
+        await _svc.PlayOnline.TriggerClientUpdateAsync(_state.FfxiDir!);
+        
+        // Launch PlayOnline Viewer
+        if (!string.IsNullOrWhiteSpace(_state.PlayOnlineViewerDir))
+        {
+            _svc.PlayOnline.LaunchPlayOnlineViewer(_state.PlayOnlineViewerDir);
+            
+            MessageBox.Show(
+                "Version mismatch fix started!\n\n" +
+                "PlayOnline Viewer is launching...\n\n" +
+                "Steps to complete the update:\n" +
+                "1. Click 'Check Files' on the left\n" +
+                "2. Select 'FINAL FANTASY XI' from dropdown\n" +
+                "3. Click 'Check Files' button\n" +
+                "4. Click 'Fix Errors' when prompted\n" +
+                "5. Wait for update to complete\n\n" +
+                "Once complete, return here and click 'START GAME'",
+                "Update Instructions",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+            
+            StatusLine.Text = "Status: Waiting for PlayOnline update...";
+        }
+        else
+        {
+            MessageBox.Show(
+                "PlayOnline Viewer path not set.\n\n" +
+                "Please go to Settings and configure the PlayOnline Viewer path,\n" +
+                "then use the 'Patch FFXI' button to complete the update.",
+                "Configuration Required",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+        }
+    }
+    catch (Exception ex)
+    {
+        _svc.Logger.Write("AutoFixVersionMismatch failed", ex);
+        MessageBox.Show(
+            $"Failed to auto-fix version mismatch.\n\nError: {ex.Message}\n\n" +
+            "Please go to Settings → Patch FFXI to update manually.",
+            "Auto-Fix Failed",
+            MessageBoxButton.OK,
+            MessageBoxImage.Error
+        );
     }
 }
 

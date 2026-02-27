@@ -501,6 +501,159 @@ public partial class SettingsView : UserControl
         }
     }
 
+    private async void CheckVersion_Click(object sender, RoutedEventArgs e)
+    {
+        _state = _svc.StateStore.Load();
+
+        if (string.IsNullOrWhiteSpace(_state.FfxiDir))
+        {
+            MessageBox.Show(
+                "Please set your FFXI folder path first.",
+                "FFXI Path Required",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            return;
+        }
+
+        try
+        {
+            CheckVersionButton.IsEnabled = false;
+            PatchStatusText.Text = "🔍 Checking versions...";
+
+            // This will log detailed info to launcher.log
+            var mismatch = await _svc.Version.CheckVersionMismatchAsync(_state.FfxiDir);
+
+            string message;
+            if (mismatch == null)
+            {
+                message = "Unable to determine version status.\n\n" +
+                         "Check launcher.log for details.\n\n" +
+                         $"Log location:\n{Path.Combine(_svc.BaseDir, "logs", "launcher.log")}";
+                PatchStatusText.Text = "⚠️ Version check inconclusive - see log";
+            }
+            else if (mismatch == true)
+            {
+                message = "🚨 VERSION MISMATCH DETECTED!\n\n" +
+                         "Your client is out of date.\n\n" +
+                         "Click 'Fix Version Mismatch' button to update.";
+                PatchStatusText.Text = "🚨 Version mismatch detected!";
+            }
+            else
+            {
+                message = "✅ Version OK!\n\n" +
+                         "Your client matches the server version.\n\n" +
+                         "No update needed.";
+                PatchStatusText.Text = "✅ Version OK - no update needed";
+            }
+
+            MessageBox.Show(message, "Version Check", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            _svc.Logger.Write("CheckVersion_Click failed", ex);
+            MessageBox.Show(
+                $"Error checking version:\n\n{ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error
+            );
+            PatchStatusText.Text = "❌ Version check failed";
+        }
+        finally
+        {
+            CheckVersionButton.IsEnabled = true;
+        }
+    }
+
+    private async void FixVersion_Click(object sender, RoutedEventArgs e)
+    {
+        _state = _svc.StateStore.Load();
+
+        // Validate paths are set
+        if (string.IsNullOrWhiteSpace(_state.FfxiDir) || !Directory.Exists(_state.FfxiDir))
+        {
+            MessageBox.Show(
+                "Please set your FFXI folder path first.",
+                "FFXI Path Required",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(_state.PlayOnlineViewerDir) || !Directory.Exists(_state.PlayOnlineViewerDir))
+        {
+            MessageBox.Show(
+                "Please set your PlayOnline Viewer path first.",
+                "PlayOnline Path Required",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            return;
+        }
+
+        var result = MessageBox.Show(
+            "Fix Version Mismatch (POL-3331)\n\n" +
+            "This will:\n" +
+            "1. Delete ROM/0/0.DAT to trigger a version update\n" +
+            "2. Launch PlayOnline Viewer\n" +
+            "3. Guide you through the file check process\n\n" +
+            "This fixes the POL-3331 error when the server has been updated.\n\n" +
+            "Continue?",
+            "Fix Version Mismatch",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question
+        );
+
+        if (result != MessageBoxResult.Yes)
+            return;
+
+        try
+        {
+            PatchStatusText.Text = "⏳ Deleting 0.DAT to trigger update...";
+            FixVersionButton.IsEnabled = false;
+
+            // Delete 0.DAT (with elevation)
+            await _svc.PlayOnline.TriggerClientUpdateAsync(_state.FfxiDir);
+
+            // Launch PlayOnline Viewer
+            _svc.PlayOnline.LaunchPlayOnlineViewer(_state.PlayOnlineViewerDir);
+
+            MessageBox.Show(
+                "Version mismatch fix started!\n\n" +
+                "PlayOnline Viewer is launching...\n\n" +
+                "Steps to complete:\n" +
+                "1. Click 'Check Files' on the left\n" +
+                "2. Select 'FINAL FANTASY XI' from dropdown\n" +
+                "3. Click 'Check Files' button\n" +
+                "4. Click 'Fix Errors' when prompted\n" +
+                "5. Wait for update to complete (may take 10-30 minutes)\n\n" +
+                "Once complete, you can launch the game normally!",
+                "Update Instructions",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+
+            PatchStatusText.Text = "✅ 0.DAT deleted. Complete the PlayOnline file check, then you can play!";
+        }
+        catch (Exception ex)
+        {
+            _svc.Logger.Write("FixVersion_Click failed", ex);
+            MessageBox.Show(
+                $"Failed to trigger version update.\n\nError: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error
+            );
+            PatchStatusText.Text = "❌ Failed to fix version mismatch.";
+        }
+        finally
+        {
+            FixVersionButton.IsEnabled = true;
+        }
+    }
+
     private async void PatchFfxi_Click(object sender, RoutedEventArgs e)
     {
         _state = _svc.StateStore.Load();
