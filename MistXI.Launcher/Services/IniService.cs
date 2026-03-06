@@ -151,7 +151,7 @@ behaviorflags.fpu_preserve                      = 0
 0032 = 0
 0033 = 0
 0034 = {WINDOW_MODE}
-0035 = 1
+0035 = {SOUND_ALWAYS_ON}
 0036 = {MAP_COMPRESSION}
 0037 = {RES_WIDTH}
 0038 = {RES_HEIGHT}
@@ -174,6 +174,9 @@ padguid000 = -1
         // WindowMode: 0=Fullscreen, 1=Windowed, 3=Borderless
         // Registry 0034: 0=Fullscreen, 1=Windowed, 3=Borderless Windowed
         ini = ini.Replace("{WINDOW_MODE}", profile.WindowMode.ToString());
+        
+        // Background audio setting (0035)
+        ini = ini.Replace("{SOUND_ALWAYS_ON}", profile.SoundAlwaysOn ? "1" : "0");
         
         // Registry 0000 is for something else (keep old windowed logic for backward compat)
         string windowModeValue = profile.WindowMode switch

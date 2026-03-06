@@ -12,6 +12,7 @@ public partial class HomeView : UserControl
     private LauncherState _state;
     private const string DefaultServer = "play.mistxi.com";
     private CancellationTokenSource? _cts;
+    private bool _hasCheckedAddons = false;
 
     public HomeView(AppServices services)
     {
@@ -144,6 +145,10 @@ public partial class HomeView : UserControl
                 await _svc.Ashita.EnsureLatestAshitaAsync(ashitaDir, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None);
                 await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None, _state.XiLoaderVersion);
                 
+                // Download recommended addons/plugins
+                StatusLine.Text = "Status: Checking recommended addons...";
+                await _svc.AddonDownloader.EnsureRecommendedAddonsAsync(ashitaDir, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None);
+                
                 StatusLine.Text = "Status: Ready to launch";
             }
             catch (Exception ex)
@@ -155,6 +160,28 @@ public partial class HomeView : UserControl
             {
                 ProgressBar.IsIndeterminate = false;
             }
+        }
+        
+        // Always check for recommended addons on startup (quick if already installed)
+        if (!_hasCheckedAddons)
+        {
+            _hasCheckedAddons = true;
+            try
+            {
+                StatusLine.Text = "Status: Checking recommended addons...";
+                await _svc.AddonDownloader.EnsureRecommendedAddonsAsync(ashitaDir, new Progress<string>(s => StatusLine.Text = $"Status: {s}"), CancellationToken.None);
+                StatusLine.Text = "Status: Ready";
+            }
+            catch (Exception ex)
+            {
+                _svc.Logger.Write("Failed to check recommended addons on startup", ex);
+                StatusLine.Text = "Status: Ready";
+            }
+        }
+        else
+        {
+            // Already checked, just set status to ready
+            StatusLine.Text = "Status: Ready";
         }
     }
 
@@ -317,6 +344,10 @@ public partial class HomeView : UserControl
 
             StatusLine.Text = "Status: Downloading/updating XiLoader…";
             await _svc.XiLoader.EnsureLatestXiLoaderAsync(xiloaderPath, new Progress<string>(s => StatusLine.Text = "Status: " + s), _cts.Token, _state.XiLoaderVersion);
+
+            // Download recommended addons/plugins (StatusTimers, MobDB, Deeps)
+            StatusLine.Text = "Status: Checking recommended addons...";
+            await _svc.AddonDownloader.EnsureRecommendedAddonsAsync(ashitaDir, new Progress<string>(s => StatusLine.Text = "Status: " + s), _cts.Token);
 
             var iniText = _svc.Ini.BuildMistIni(_state.FfxiDir!, _state.SelectedServer,
                 string.IsNullOrWhiteSpace(user) ? null : user,

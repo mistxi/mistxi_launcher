@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DKLFaRj2CcE=",
+  "dgSpecHash": "WJBegQAdrOk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj",
+  "projectFilePath": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.Launcher\\MistXI.Launcher.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\corey\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.24\\microsoft.net.illink.tasks.8.0.24.nupkg.sha512",
     "C:\\Users\\corey\\.nuget\\packages\\system.codedom\\8.0.0\\system.codedom.8.0.0.nupkg.sha512",

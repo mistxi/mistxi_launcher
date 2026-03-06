@@ -1,0 +1,2 @@
+C:\Users\corey\Downloads\MistXI_Launcher_v1.4.2\MistXI.Launcher\bin\Release\net8.0-windows\win-x64\publish\MistXI.Launcher.pdb
+C:\Users\corey\Downloads\MistXI_Launcher_v1.4.2\MistXI.Launcher\bin\Release\net8.0-windows\win-x64\publish\MistXI.Launcher.exe

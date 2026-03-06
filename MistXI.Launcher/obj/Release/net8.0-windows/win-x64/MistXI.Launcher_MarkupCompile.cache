@@ -1,18 +1,18 @@
 ﻿MistXI.Launcher
-1.4.0.0
+1.4.2.0
 
 winexe
 C#
 .cs
-C:\Users\corey\Desktop\MistXI.Launcher\obj\Release\net8.0-windows\win-x64\
+C:\Users\corey\Downloads\MistXI_Launcher_v1.4.2\MistXI.Launcher\obj\Release\net8.0-windows\win-x64\
 MistXI.Launcher
 none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-C:\Users\corey\Desktop\MistXI.Launcher\App.xaml
+C:\Users\corey\Downloads\MistXI_Launcher_v1.4.2\MistXI.Launcher\App.xaml
 759296290
 
-262047358804
+271750813559
 199107929142
 FirstRunWizard.xaml;MainWindow.xaml;Themes\MistTheme.xaml;Views\AddonsView.xaml;Views\HomeView.xaml;Views\ProfilesView.xaml;Views\SettingsView.xaml;
 
