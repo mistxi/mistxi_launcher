@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj": {}
+    "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.Launcher\\MistXI.Launcher.csproj": {}
   },
   "projects": {
-    "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj": {
-      "version": "1.4.0",
+    "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.Launcher\\MistXI.Launcher.csproj": {
+      "version": "1.4.2",
       "restore": {
-        "projectUniqueName": "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj",
+        "projectUniqueName": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.Launcher\\MistXI.Launcher.csproj",
         "projectName": "MistXI.Launcher",
-        "projectPath": "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\MistXI.Launcher.csproj",
+        "projectPath": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.Launcher\\MistXI.Launcher.csproj",
         "packagesPath": "C:\\Users\\corey\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\corey\\Desktop\\MistXI.Launcher\\obj\\",
+        "outputPath": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.Launcher\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\corey\\AppData\\Roaming\\NuGet\\NuGet.Config"

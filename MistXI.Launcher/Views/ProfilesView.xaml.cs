@@ -166,6 +166,50 @@ public partial class ProfilesView : UserControl
         SaveStatusText.Text = "* Unsaved changes";
     }
 
+    private void SoundAlwaysOn_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoading || _currentProfile == null) return;
+
+        // Update the profile
+        _currentProfile.SoundAlwaysOn = SoundAlwaysOnCheck.IsChecked == true;
+
+        // Mark as changed
+        SaveProfileBtn.IsEnabled = true;
+        SaveStatusText.Text = "* Unsaved changes";
+
+        // IMMEDIATELY update the mistxi.ini file if it exists
+        try
+        {
+            var ashitaDir = Path.Combine(_svc.BaseDir, "runtime", "ashita");
+            var iniPath = Path.Combine(ashitaDir, "config", "boot", "mistxi.ini");
+
+            if (File.Exists(iniPath))
+            {
+                // Read the entire INI file
+                var lines = File.ReadAllLines(iniPath);
+
+                // Find and update line 0035
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith("0035"))
+                    {
+                        lines[i] = $"0035 = {(_currentProfile.SoundAlwaysOn ? "1" : "0")}";
+                        _svc.Logger.Write($"Updated mistxi.ini setting 0035 to {(_currentProfile.SoundAlwaysOn ? "1" : "0")}");
+                        break;
+                    }
+                }
+
+                // Write back to file
+                File.WriteAllLines(iniPath, lines);
+            }
+        }
+        catch (Exception ex)
+        {
+            _svc.Logger.Write("Failed to update mistxi.ini setting 0035", ex);
+            // Non-fatal, will be updated on next game launch
+        }
+    }
+
     private void UpdateGraphicsQualityText()
     {
         var value = (int)GraphicsQualitySlider.Value;

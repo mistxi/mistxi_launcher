@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cmaReFnrKWg=",
+  "dgSpecHash": "YOk/kPN0eU0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\corey\\Desktop\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj",
+  "projectFilePath": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\corey\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.24\\microsoft.net.illink.tasks.8.0.24.nupkg.sha512",
     "C:\\Users\\corey\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",

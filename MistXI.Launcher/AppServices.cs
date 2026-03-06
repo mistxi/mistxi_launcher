@@ -20,6 +20,7 @@ public sealed class AppServices
     public required FfxiInstallerService FfxiInstaller { get; init; }
     public required LauncherUpdater Updater { get; init; }
     public required VersionService Version { get; init; }
+    public required AddonDownloader AddonDownloader { get; init; }
 
     public static AppServices Create()
     {
@@ -46,7 +47,8 @@ public sealed class AppServices
             PlayOnline = new PlayOnlineService(logger),
             FfxiInstaller = new FfxiInstallerService(http, logger),
             Updater = new LauncherUpdater(logger),
-            Version = new VersionService(logger)
+            Version = new VersionService(logger),
+            AddonDownloader = new AddonDownloader(logger)
         };
     }
 }

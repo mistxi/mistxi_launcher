@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\corey\\Desktop\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj": {}
+    "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj": {}
   },
   "projects": {
-    "C:\\Users\\corey\\Desktop\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj": {
+    "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\corey\\Desktop\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj",
+        "projectUniqueName": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj",
         "projectName": "MistXI.PatchHelper",
-        "projectPath": "C:\\Users\\corey\\Desktop\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj",
+        "projectPath": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.PatchHelper\\MistXI.PatchHelper.csproj",
         "packagesPath": "C:\\Users\\corey\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\corey\\Desktop\\MistXI.PatchHelper\\obj\\",
+        "outputPath": "C:\\Users\\corey\\Downloads\\MistXI_Launcher_v1.4.2\\MistXI.PatchHelper\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\corey\\AppData\\Roaming\\NuGet\\NuGet.Config"
