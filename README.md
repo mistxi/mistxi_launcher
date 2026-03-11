@@ -2,7 +2,7 @@
 
 A modern, all-in-one launcher for the MistXI FFXI private server. Automates installation, patching, and configuration to get you playing in minutes instead of hours.
 
-![MistXI Launcher](https://img.shields.io/badge/version-1.4.2-teal)
+![MistXI Launcher](https://img.shields.io/badge/version-1.4.4-teal)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey)
 
@@ -261,6 +261,14 @@ On every launch, the launcher:
 5. Open a Pull Request
 
 ## 📝 Changelog
+
+### v1.4.4 (March 2026)
+- 🚀 General app optimizations and changes to launch workflow to speed up the launcher
+- ✨ Added "Open" buttons for the FFXI and POL folders that opens those directories in explorer
+- 🐛 Fixed a bug that caused the "Browse" button for the FFXI folder to open the POL folder
+
+### v1.4.3 (March 2026)
+- 🐛 Fixed a bug that flagged client mismatches that were newer than the server, preventing launch
 
 ### v1.4.2 (March 2026)
 - ➕ Added statustimer ashita addon to the Addons manager
