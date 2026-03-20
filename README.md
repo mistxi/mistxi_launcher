@@ -83,7 +83,7 @@ Settings → Fix Version Mismatch (POL-3331) - automatically applies DSP patch a
 
 ## 📝 Recent Changes
 
-###v1.5.1 (March 2026)
+### v1.5.1 (March 2026)
 - 🎨 Redesign of the home page to be more accommodating to smaller displays, moving the save user/pass function to the profile page
 - 🎨 Streamlined addon list display spacing
 - 🎨 Maintenance status now pulled from the API and will prevent game start during maintenance periods
