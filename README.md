@@ -84,18 +84,18 @@ Settings → Fix Version Mismatch (POL-3331) - automatically applies DSP patch a
 ## 📝 Recent Changes
 
 ###v1.5.1 (March 2026)
-🎨 Redesign of the home page to be more accommodating to smaller displays, moving the save user/pass function to the profile page
-🎨 Streamlined addon list display spacing
-🎨 Maintenance status now pulled from the API and will prevent game start during maintenance periods
-✨ Added per-profile credential storage with encrypted password support
-✨ Added a version status pane to the settings page, along with a visual indicator of if the version numbers are acceptable to play
-✨ Full gamepad/controller support integrated into the Profile tab
-✨ Advanced settings mode to disable INI generation for advanced users
-✨ Revamped Addons page with search functionality and XIPivot quick-enable toggle
-✨ Enhanced XIPivot management with Remove button and proper enable/disable functionality
-🐛 Fixed a bug that prevented the active profile from being editable without clicking away and re-selecting
-🐛 Fixed server dropdown selection not persisting between tab navigation
-🐛 Fixed a bug that removed the DSP patch during a client update, requiring it to be re-applied
+- 🎨 Redesign of the home page to be more accommodating to smaller displays, moving the save user/pass function to the profile page
+- 🎨 Streamlined addon list display spacing
+- 🎨 Maintenance status now pulled from the API and will prevent game start during maintenance periods
+- ✨ Added per-profile credential storage with encrypted password support
+- ✨ Added a version status pane to the settings page, along with a visual indicator of if the version numbers are acceptable to play
+- ✨ Full gamepad/controller support integrated into the Profile tab
+- ✨ Advanced settings mode to disable INI generation for advanced users
+- ✨ Revamped Addons page with search functionality and XIPivot quick-enable toggle
+- ✨ Enhanced XIPivot management with Remove button and proper enable/disable functionality
+- 🐛 Fixed a bug that prevented the active profile from being editable without clicking away and re-selecting
+- 🐛 Fixed server dropdown selection not persisting between tab navigation
+- 🐛 Fixed a bug that removed the DSP patch during a client update, requiring it to be re-applied
 
 [Full Changelog](CHANGELOG.md)
 
