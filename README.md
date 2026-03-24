@@ -2,7 +2,7 @@
 
 A modern, all-in-one launcher for the MistXI FFXI private server. Get playing in minutes with automated installation, patching, and configuration.
 
-![MistXI Launcher](https://img.shields.io/badge/version-1.5.1-teal)
+![MistXI Launcher](https://img.shields.io/badge/version-1.5.4-teal)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey)
 
@@ -14,6 +14,8 @@ A modern, all-in-one launcher for the MistXI FFXI private server. Get playing in
 - **Auto-Updates** - Keeps Ashita v4 and XiLoader current
 - **Smart Patching** - Automated DSP patch and version management
 - **Maintenance Detection** - Automatically detects server maintenance from API
+- **Gamepad Support** - Native controller support
+
 
 ## 🎯 Quick Start
 
