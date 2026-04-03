@@ -9,12 +9,13 @@ A modern, all-in-one launcher for the MistXI FFXI private server. Get playing in
 ## ✨ Key Features
 
 - **One-Click FFXI Installation** - Automated download and setup (~3.5 GB)
-- **Profile System** - Multiple configurations with encrypted credential storage
+- **Profile System** - Multiple configurations with encrypted credential storage, import and export for backups
 - **Addon Manager** - Visual interface with search and XIPivot DAT overlay support
 - **Auto-Updates** - Keeps Ashita v4 and XiLoader current
 - **Smart Patching** - Automated DSP patch and version management
 - **Maintenance Detection** - Automatically detects server maintenance from API
 - **Gamepad Support** - Native controller support
+
 
 
 ## 🎯 Quick Start
