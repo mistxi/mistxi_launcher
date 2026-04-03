@@ -2,7 +2,7 @@
 
 A modern, all-in-one launcher for the MistXI FFXI private server. Get playing in minutes with automated installation, patching, and configuration.
 
-![MistXI Launcher](https://img.shields.io/badge/version-1.5.4-teal)
+![MistXI Launcher](https://img.shields.io/badge/version-1.6.0-teal)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey)
 
@@ -48,6 +48,7 @@ A modern, all-in-one launcher for the MistXI FFXI private server. Get playing in
 - XIPivot DAT overlays for texture mods
 - Advanced mode (manual INI control)
 - FPS limiting (30/60 via Ashita addon)
+- Integrated Sanbox support for client downgrades
 
 ## 🔧 Development
 
